@@ -49,7 +49,7 @@
 		<google.java.format.version>1.36.0</google.java.format.version>
 		<archunit.version>1.4.2</archunit.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<jackson.version>2.22.1</jackson.version>
+		<jackson.version>2.22.2</jackson.version>
 		<jsonpath.version>3.0.0</jsonpath.version>
 		<picocli.version>4.7.7</picocli.version>
 		<hikari.version>7.1.0</hikari.version>
