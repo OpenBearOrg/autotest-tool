@@ -1,0 +1,70 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://openbear.org/schemas/autotest-tool/project-1.0.0.schema.json",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"projectVersion",
+		"name"
+	],
+	"properties": {
+		"projectVersion": {
+			"const": "1.0"
+		},
+		"name": {
+			"type": "string"
+		},
+		"defaults": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"environment": {
+					"type": "string"
+				},
+				"polling": {
+					"type": "object",
+					"additionalProperties": false,
+					"properties": {
+						"timeout": {
+							"type": "string"
+						},
+						"interval": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"reporting": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"directory": {
+					"type": "string"
+				},
+				"payloadMaxSize": {
+					"type": "string"
+				},
+				"redactedFields": {
+					"type": "array",
+					"items": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"execution": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"parallelism": {
+					"type": "integer",
+					"minimum": 1
+				},
+				"failFast": {
+					"type": "boolean"
+				}
+			}
+		}
+	}
+}

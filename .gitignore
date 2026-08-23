@@ -1,0 +1,40 @@
+# Build outputs
+**/target/
+**/reports/
+out/
+dist/
+
+# IDE metadata
+.idea/
+.vscode/
+.classpath
+.project
+.settings/
+*.iml
+*.ipr
+*.iws
+
+# OS and editor noise
+.DS_Store
+Thumbs.db
+ehthumbs.db
+*.swp
+*.swo
+*.tmp
+*.bak
+*.orig
+*.rej
+
+# Runtime leftovers
+*.log
+*.out
+*.err
+*.pid
+*.seed
+*.stackdump
+hs_err_pid*
+replay_pid*
+/workspaces/
+
+# User-supplied external JDBC drivers
+/lib/jdbc/*.jar

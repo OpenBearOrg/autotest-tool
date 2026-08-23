@@ -1,0 +1,5 @@
+suiteVersion: "1.0"
+id: SMOKE
+name: Smoke Suite
+includeTags:
+  - smoke

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ruleset name="AutoTest PMD"
+         xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.github.io/schema/ruleset_2_0_0.xsd">
+    <description>
+        AutoTest Tool production-code static analysis rules.
+    </description>
+
+    <rule ref="category/java/errorprone.xml">
+        <!-- Deferred until the owning domain/compiler refactors remove the legacy patterns. -->
+        <exclude name="AssignmentInOperand" />
+        <exclude name="AvoidDuplicateLiterals" />
+        <exclude name="AvoidFieldNameMatchingMethodName" />
+        <exclude name="AvoidLiteralsInIfCondition" />
+        <exclude name="CloseResource" />
+      <exclude name="NullAssignment" />
+      <exclude name="MissingSerialVersionUID" />
+      <exclude name="UseProperClassLoader" />
+      <exclude name="TestClassWithoutTestCases" />
+    </rule>
+    <rule ref="category/java/bestpractices.xml">
+        <!-- Deferred until the owning engine/JDBC refactors can change these safely. -->
+        <exclude name="AvoidReassigningLoopVariables" />
+        <exclude name="AvoidReassigningParameters" />
+        <exclude name="GuardLogStatement" />
+        <exclude name="LiteralsFirstInComparisons" />
+        <exclude name="LooseCoupling" />
+        <exclude name="OneDeclarationPerLine" />
+        <exclude name="PreserveStackTrace" />
+        <exclude name="RelianceOnDefaultCharset" />
+        <exclude name="SystemPrintln" />
+      <exclude name="UseTryWithResources" />
+        <exclude name="UnusedLocalVariable" />
+    </rule>
+</ruleset>

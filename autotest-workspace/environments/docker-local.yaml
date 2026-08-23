@@ -1,0 +1,44 @@
+# $schema: https://openbear.org/schemas/autotest-tool/environment-1.0.0.schema.json
+environmentVersion: "1.0"
+name: Docker-local
+
+services:
+  api:
+    baseUrl: http://host.docker.internal:8080/api
+    healthPath: /status
+    connectTimeout: 10s
+    requestTimeout: 60s
+    safeRetryAttempts: 2
+    defaultHeaders:
+      Accept: application/json
+      Content-Type: application/json
+      Authorization: "${AUTH_TOKEN}"
+
+databases:
+  db:
+    driver: oracle
+    jdbcUrl: jdbc:oracle:thin:@//host.docker.internal:1521/FREEPDB1
+    username:
+      secret: ${DB_USERNAME} # you can pass plain text username here without ${}
+    password:
+      secret: ${DB_PASSWORD}
+    maximumPoolSize: 5
+    connectionTimeout: 15s
+    validationTimeout: 5s
+
+#messaging:
+#  activemq:
+#    type: activemq
+#    brokerUrl: tcp://host.docker.internal:61616
+#    username:
+#      secret: ${MQ_USERNAME}
+#    password:
+#      secret: ${MQ_PASSWORD}
+
+databasePolicy:
+  allowWrites: false
+
+defaults:
+  polling:
+    timeout: 3m
+    interval: 5s

@@ -1,0 +1,23 @@
+projectVersion: "1.0"
+name: Regression Project
+
+defaults:
+  environment: docker-local.yaml
+  polling:
+    timeout: 2m
+    interval: 3s
+
+reporting:
+  directory: reports
+  payloadMaxSize: 1MB
+  redactedFields:
+    - authorization
+    - password
+    - token
+    - client_secret
+    - secret
+    - card_number
+
+execution:
+  parallelism: 1
+  failFast: false

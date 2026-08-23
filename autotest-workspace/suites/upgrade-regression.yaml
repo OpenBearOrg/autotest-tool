@@ -1,0 +1,6 @@
+suiteVersion: "1.0"
+id: UPGRADE-REGRESSION
+name: Upgrade Regression
+
+scenarios:
+  - scenarios/sample-scenario.yaml

@@ -1,0 +1,9 @@
+.git
+**/target
+!autotest-dist/target/
+!autotest-dist/target/autotest-tool-1.0.0.jar
+**/reports
+*.zip
+
+# User-supplied external JDBC drivers must never enter an image build context.
+lib/jdbc/*.jar

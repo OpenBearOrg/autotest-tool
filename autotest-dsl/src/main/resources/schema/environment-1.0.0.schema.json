@@ -1,0 +1,166 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://openbear.org/schemas/autotest-tool/environment-1.0.0.schema.json",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"environmentVersion",
+		"name"
+	],
+	"properties": {
+		"environmentVersion": {
+			"const": "1.0"
+		},
+		"name": {
+			"type": "string"
+		},
+		"services": {
+			"type": "object",
+			"additionalProperties": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"baseUrl"
+				],
+				"properties": {
+					"baseUrl": {
+						"type": "string"
+					},
+					"connectTimeout": {
+						"type": "string"
+					},
+					"requestTimeout": {
+						"type": "string"
+					},
+					"healthPath": {
+						"type": "string"
+					},
+					"safeRetryAttempts": {
+						"type": "integer",
+						"minimum": 1
+					},
+					"defaultHeaders": {
+						"type": "object",
+						"additionalProperties": {
+							"type": "string"
+						}
+					}
+				}
+			}
+		},
+		"databases": {
+			"type": "object",
+			"additionalProperties": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"jdbcUrl"
+				],
+				"properties": {
+					"driver": {
+						"type": "string"
+					},
+					"jdbcUrl": {
+						"type": "string"
+					},
+					"username": {
+						"$ref": "#/$defs/secret"
+					},
+					"password": {
+						"$ref": "#/$defs/secret"
+					},
+					"maximumPoolSize": {
+						"type": "integer",
+						"minimum": 1
+					},
+					"connectionTimeout": {
+						"type": "string"
+					},
+					"validationTimeout": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"messaging": {
+			"type": "object",
+			"additionalProperties": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"brokerUrl"
+				],
+				"properties": {
+					"type": {
+						"type": "string"
+					},
+					"brokerUrl": {
+						"type": "string"
+					},
+					"username": {
+						"$ref": "#/$defs/secret"
+					},
+					"password": {
+						"$ref": "#/$defs/secret"
+					},
+					"connectTimeout": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"resources": {
+			"type": "object",
+			"additionalProperties": {
+				"type": "object",
+				"additionalProperties": {
+					"type": "object"
+				}
+			}
+		},
+		"databasePolicy": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"allowWrites": {
+					"type": "boolean"
+				}
+			}
+		},
+		"defaults": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"polling": {
+					"$ref": "#/$defs/polling"
+				}
+			}
+		}
+	},
+	"$defs": {
+		"secret": {
+			"type": "object",
+			"additionalProperties": false,
+			"required": [
+				"secret"
+			],
+			"properties": {
+				"secret": {
+					"type": "string"
+				}
+			}
+		},
+		"polling": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"timeout": {
+					"type": "string"
+				},
+				"interval": {
+					"type": "string"
+				}
+			}
+		}
+	}
+}

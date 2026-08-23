@@ -1,0 +1,55 @@
+dslVersion: "1.0"
+id: RESOURCE-CREATE-001
+name: Create a resource
+
+tags:
+  - resource
+  - smoke
+  - regression
+  - upgrade
+
+variables:
+  correlationId: "${executionId}"
+
+execution:
+  isolation: sequential
+
+steps:
+  - http:
+      id: create-resource
+      name: Create resource
+      service: api
+      request:
+        method: POST
+        path: /resources
+        headers:
+          "correlation-id": "${correlationId}"
+          "request-id": "${executionId}"
+        bodyFile: payloads/resource.json
+        patch:
+          - op: replace
+            path: /name
+            value: "${executionId}"
+        timeout: 5s
+      capture:
+        resourceId:
+          from: response.body
+          jsonPath: $.resourceId
+      expect:
+        status: 201
+        values:
+          "$.resourceId":
+            notNull: true
+
+  - sql:
+      id: verify-resource
+      name: Verify resource
+      connection: db
+      queryFile: sql/resource/find.sql
+      parameters:
+        resourceId: "${resourceId}"
+      expect:
+        rowCount: 1
+        values:
+          "$.rows[0].RESOURCE_ID":
+            equals: "${resourceId}"

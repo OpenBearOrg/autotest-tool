@@ -1,0 +1,20 @@
+services:
+  autotest-tool:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: ${AUTOTEST_IMAGE:-autotest-tool:stable}
+    working_dir: /workspace
+    volumes:
+      - ${AUTOTEST_WORKSPACE:-./autotest-workspace}:/workspace
+      - ${AUTOTEST_JDBC_LIB_DIR:-./lib/jdbc}:/opt/autotest-tool/lib/jdbc:ro
+    environment:
+      AUTH_TOKEN: ${AUTH_TOKEN:-}
+      DB_USERNAME: ${DB_USERNAME:-}
+      DB_PASSWORD: ${DB_PASSWORD:-}
+      MQ_USERNAME: ${MQ_USERNAME:-}
+      MQ_PASSWORD: ${MQ_PASSWORD:-}
+      USER_SCOPES: ${USER_SCOPES:-}
+    stdin_open: true
+    tty: true
+    command: ["--help"]

@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+set -eu
+SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
+JAR=${AUTOTEST_JAR:-$ROOT/autotest-dist/target/autotest-tool-1.0.0.jar}
+JDBC_LIB_DIR=${AUTOTEST_JDBC_LIB_DIR:-$ROOT/lib/jdbc}
+if [ ! -f "$JAR" ]; then
+  echo "autotest-tool JAR not found: $JAR" >&2
+  echo "Build it first with: mvn clean verify" >&2
+  exit 5
+fi
+exec java ${JAVA_OPTS:-} \
+  -cp "$JAR:$JDBC_LIB_DIR/*" \
+  org.openbear.tool.autotest.cli.AutotestCli \
+  "$@"

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Autotest Author"
+  short_description: "Create validated Autotest scenarios and suites"
+  default_prompt: "Use $autotest-author to turn my test requirement into a validated scenario and suite."
+policy:
+  allow_implicit_invocation: true

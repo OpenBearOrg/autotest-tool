@@ -1,0 +1,13 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+	<modelVersion>4.0.0</modelVersion>
+	<parent><groupId>org.openbear.tool.autotest</groupId><artifactId>autotest-spi-plugins</artifactId><version>1.0.0</version></parent>
+	<artifactId>autotest-spi-plugins-built-in</artifactId>
+	<packaging>pom</packaging>
+	<modules>
+		<module>http-client-plugin</module>
+		<module>db-mysql-plugin</module>
+		<module>db-oracle-plugin</module>
+		<module>msg-activemq-plugin</module>
+		<module>reporting-default-plugin</module>
+	</modules>
+</project>

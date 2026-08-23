@@ -1,0 +1,44 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://openbear.org/schemas/autotest-tool/suite-1.0.0.schema.json",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"suiteVersion",
+		"id",
+		"name"
+	],
+	"properties": {
+		"suiteVersion": {
+			"const": "1.0"
+		},
+		"id": {
+			"type": "string"
+		},
+		"name": {
+			"type": "string"
+		},
+		"variables": {
+			"type": "object",
+			"description": "Suite values. Strings may use user-variable references or reserved ${random:...} runtime expressions."
+		},
+		"scenarios": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"includeTags": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"excludeTags": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		}
+	}
+}

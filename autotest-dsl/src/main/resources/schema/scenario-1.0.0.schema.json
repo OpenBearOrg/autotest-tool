@@ -1,0 +1,553 @@
+{
+	"$schema": "https://json-schema.org/draft/2020-12/schema",
+	"$id": "https://openbear.org/schemas/autotest-tool/scenario-1.0.0.schema.json",
+	"type": "object",
+	"additionalProperties": false,
+	"required": [
+		"dslVersion",
+		"id",
+		"name",
+		"steps"
+	],
+	"properties": {
+		"dslVersion": {
+			"const": "1.0"
+		},
+		"id": {
+			"type": "string",
+			"minLength": 1
+		},
+		"name": {
+			"type": "string",
+			"minLength": 1
+		},
+		"tags": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			}
+		},
+		"requiredVariables": {
+			"type": "array",
+			"items": {
+				"type": "string"
+			},
+			"uniqueItems": true
+		},
+		"variables": {
+			"type": "object",
+			"description": "Scenario values. Strings may use user-variable references or reserved ${random:...} runtime expressions."
+		},
+		"setup": {
+			"$ref": "#/$defs/steps"
+		},
+		"steps": {
+			"$ref": "#/$defs/steps"
+		},
+		"cleanup": {
+			"$ref": "#/$defs/steps"
+		},
+		"execution": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"isolation": {
+					"enum": [
+						"sequential",
+						"parallel-safe"
+					]
+				}
+			}
+		}
+	},
+	"$defs": {
+		"steps": {
+			"type": "array",
+			"items": {
+				"oneOf": [
+					{
+						"type": "object",
+						"required": [
+							"http"
+						],
+						"additionalProperties": false,
+						"properties": {
+							"http": {
+								"$ref": "#/$defs/http"
+							}
+						}
+					},
+					{
+						"type": "object",
+						"required": [
+							"sql"
+						],
+						"additionalProperties": false,
+						"properties": {
+							"sql": {
+								"$ref": "#/$defs/sql"
+							}
+						}
+					},
+					{
+						"type": "object",
+						"required": [
+							"awaitSql"
+						],
+						"additionalProperties": false,
+						"properties": {
+							"awaitSql": {
+								"$ref": "#/$defs/awaitSql"
+							}
+						}
+					},
+					{
+						"type": "object",
+						"required": [
+							"awaitMessage"
+						],
+						"additionalProperties": false,
+						"properties": {
+							"awaitMessage": {
+								"$ref": "#/$defs/awaitMessage"
+							}
+						}
+					},
+					{
+						"type": "object",
+						"required": [
+							"set"
+						],
+						"additionalProperties": false,
+						"properties": {
+							"set": {
+								"$ref": "#/$defs/set"
+							}
+						}
+					},
+					{
+						"type": "object",
+						"required": [
+							"assert"
+						],
+						"additionalProperties": false,
+						"properties": {
+							"assert": {
+								"$ref": "#/$defs/assert"
+							}
+						}
+					}
+				]
+			}
+		},
+		"common": {
+			"type": "object",
+			"properties": {
+				"id": {
+					"type": "string",
+					"minLength": 1
+				},
+				"name": {
+					"type": "string"
+				},
+				"description": {
+					"type": "string"
+				},
+				"continueOnFailure": {
+					"type": "boolean"
+				}
+			},
+			"required": [
+				"id"
+			]
+		},
+		"capture": {
+			"type": "object",
+			"additionalProperties": {
+				"type": "object",
+				"additionalProperties": false,
+				"required": [
+					"jsonPath"
+				],
+				"properties": {
+					"from": {
+						"type": "string"
+					},
+					"jsonPath": {
+						"type": "string"
+					}
+				}
+			}
+		},
+		"polling": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"timeout": {
+					"type": "string"
+				},
+				"interval": {
+					"type": "string"
+				}
+			}
+		},
+		"expect": {
+			"type": "object",
+			"additionalProperties": false,
+			"properties": {
+				"rowCount": {
+					"type": "integer",
+					"minimum": 0
+				},
+				"values": {
+					"type": "object"
+				}
+			}
+		},
+		"http": {
+			"allOf": [
+				{
+					"$ref": "#/$defs/common"
+				},
+				{
+					"type": "object",
+					"additionalProperties": false,
+					"required": [
+						"id",
+						"service",
+						"request"
+					],
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"description": {
+								"type": "string"
+							},
+							"continueOnFailure": {
+								"type": "boolean"
+							},
+						"service": {
+							"type": "string"
+						},
+						"request": {
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"method": {
+									"type": "string"
+								},
+								"path": {
+									"type": "string"
+								},
+								"query": {
+									"type": "object"
+								},
+								"headers": {
+									"type": "object",
+									"additionalProperties": {
+										"type": "string"
+									}
+								},
+								"bodyFile": {
+									"type": "string"
+								},
+								"body": {},
+								"patch": {
+									"type": "array",
+									"items": {
+										"type": "object",
+										"additionalProperties": false,
+										"required": [
+											"op",
+											"path"
+										],
+										"properties": {
+											"op": {
+												"enum": [
+													"add",
+													"replace",
+													"remove"
+												]
+											},
+											"path": {
+												"type": "string"
+											},
+											"value": {}
+										}
+									}
+								},
+								"timeout": {
+									"type": "string"
+								},
+								"retry": {
+									"type": "object",
+									"additionalProperties": false,
+									"properties": {
+										"enabled": {
+											"type": "boolean"
+										},
+										"maxAttempts": {
+											"type": "integer",
+											"minimum": 1
+										},
+										"delay": {
+											"type": "string"
+										}
+									}
+								}
+							}
+						},
+						"expect": {
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"status": {
+									"type": "integer"
+								},
+								"values": {
+									"type": "object"
+								}
+							}
+						},
+						"capture": {
+							"$ref": "#/$defs/capture"
+						}
+					}
+				}
+			]
+		},
+		"sql": {
+			"allOf": [
+				{
+					"$ref": "#/$defs/common"
+				},
+				{
+					"type": "object",
+					"additionalProperties": false,
+					"required": [
+						"id",
+						"connection"
+					],
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"description": {
+								"type": "string"
+							},
+							"continueOnFailure": {
+								"type": "boolean"
+							},
+						"connection": {
+							"type": "string"
+						},
+						"queryFile": {
+							"type": "string"
+						},
+						"query": {
+							"type": "string"
+						},
+						"parameters": {
+							"type": "object"
+						},
+						"expect": {
+							"$ref": "#/$defs/expect"
+						},
+						"capture": {
+							"$ref": "#/$defs/capture"
+						}
+					}
+				}
+			]
+		},
+		"awaitSql": {
+			"allOf": [
+				{
+					"$ref": "#/$defs/common"
+				},
+				{
+					"type": "object",
+					"additionalProperties": false,
+					"required": [
+						"id",
+						"connection"
+					],
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"description": {
+								"type": "string"
+							},
+							"continueOnFailure": {
+								"type": "boolean"
+							},
+						"connection": {
+							"type": "string"
+						},
+						"queryFile": {
+							"type": "string"
+						},
+						"query": {
+							"type": "string"
+						},
+						"parameters": {
+							"type": "object"
+						},
+						"expect": {
+							"$ref": "#/$defs/expect"
+						},
+						"capture": {
+							"$ref": "#/$defs/capture"
+						},
+						"polling": {
+							"$ref": "#/$defs/polling"
+						}
+					}
+				}
+			]
+		},
+		"awaitMessage": {
+			"allOf": [
+				{
+					"$ref": "#/$defs/common"
+				},
+				{
+					"type": "object",
+					"additionalProperties": false,
+					"required": [
+						"id",
+						"connection",
+						"destination"
+					],
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"description": {
+								"type": "string"
+							},
+							"continueOnFailure": {
+								"type": "boolean"
+							},
+						"connection": {
+							"type": "string"
+						},
+						"destination": {
+							"type": "string"
+						},
+						"observationMode": {
+							"enum": [
+								"dedicated",
+								"browse"
+							]
+						},
+						"selector": {
+							"type": "string"
+						},
+						"polling": {
+							"$ref": "#/$defs/polling"
+						},
+						"match": {
+							"type": "object",
+							"additionalProperties": false,
+							"properties": {
+								"correlationId": {},
+								"messageId": {},
+								"properties": {
+									"type": "object"
+								},
+								"body": {
+									"type": "object"
+								}
+							}
+						},
+						"expect": {
+							"$ref": "#/$defs/expect"
+						},
+						"capture": {
+							"$ref": "#/$defs/capture"
+						}
+					}
+				}
+			]
+		},
+		"set": {
+			"allOf": [
+				{
+					"$ref": "#/$defs/common"
+				},
+				{
+					"type": "object",
+					"additionalProperties": false,
+					"required": [
+						"id",
+						"values"
+					],
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"description": {
+								"type": "string"
+							},
+							"continueOnFailure": {
+								"type": "boolean"
+							},
+						"values": {
+							"type": "object"
+						}
+					}
+				}
+			]
+		},
+		"assert": {
+			"allOf": [
+				{
+					"$ref": "#/$defs/common"
+				},
+				{
+					"type": "object",
+					"additionalProperties": false,
+					"required": [
+						"id",
+						"values"
+					],
+						"properties": {
+							"id": {
+								"type": "string"
+							},
+							"name": {
+								"type": "string"
+							},
+							"description": {
+								"type": "string"
+							},
+							"continueOnFailure": {
+								"type": "boolean"
+							},
+						"values": {
+							"type": "object"
+						}
+					}
+				}
+			]
+		}
+	}
+}

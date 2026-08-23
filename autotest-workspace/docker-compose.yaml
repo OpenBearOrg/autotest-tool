@@ -1,0 +1,14 @@
+services:
+  autotest-tool:
+    image: ${AUTOTEST_IMAGE:-ghcr.io/openbearorg/autotest-tool:stable}
+    pull_policy: missing
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    environment:
+      AUTH_TOKEN: ${AUTH_TOKEN:-}
+      DB_USERNAME: ${DB_USERNAME:-}
+      DB_PASSWORD: ${DB_PASSWORD:-}
+    stdin_open: true
+    tty: true
+    command: ["--help"]

@@ -1,0 +1,16 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.openbear.tool.autotest</groupId>
+		<artifactId>autotest-parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<artifactId>autotest-external-plugin-fixture</artifactId>
+	<dependencies>
+		<dependency>
+			<groupId>org.openbear.tool.autotest</groupId>
+			<artifactId>autotest-spi</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+	</dependencies>
+</project>
