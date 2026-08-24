@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased
+
+- Fixed public-SPI assertion mismatches escaping as `AssertionError`; they now produce ordinary
+  test `FAIL` results with complete step, scenario and run lifecycle events.
+- Emit terminal `RunFinished(ERROR)` events before rethrowing unexpected runtime or serious JVM
+  execution failures.
+- Pinned GitHub Actions to immutable commit revisions and documented the supported direct Maven
+  range. The Maven Wrapper remains pinned to Maven 3.9.9.
+
 ## 1.0.0 - 2026-08-19
 
 - Initial stable DSL 1.0.
