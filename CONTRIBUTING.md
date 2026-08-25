@@ -3,7 +3,8 @@
 ## Requirements
 
 - JDK 21
-- No local Maven installation is required; use `./mvnw`.
+- Use `./mvnw` (or `mvnw.cmd` on Windows); it pins Maven 3.9.9 for repeatable builds.
+- Direct Maven use is supported with Maven 3.9.9 or later in the 3.9.x line. Maven 4 is not yet supported.
 
 ## Build and quality gate
 

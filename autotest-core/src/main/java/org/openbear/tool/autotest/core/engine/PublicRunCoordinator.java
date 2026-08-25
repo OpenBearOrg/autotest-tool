@@ -40,7 +40,6 @@ public final class PublicRunCoordinator {
     Instant started = clock.instant();
     RunId runId = request.runId();
     ExecutionEventDispatcher events = new ExecutionEventDispatcher(clock, request.listeners());
-    events.publish(new RunStarted(runId, plan.projectName(), plan.environment().id()));
     RunResult result = new RunResult();
     result.setToolVersion(AutotestVersion.VERSION);
     result.setRunId(runId.value());
@@ -49,29 +48,54 @@ public final class PublicRunCoordinator {
     result.setEnvironment(plan.environment().name());
     result.setGitCommit(plan.metadata().gitCommit());
     result.setStartedAt(started);
-    List<ScenarioResult> completed =
-        scheduler.execute(
-            runId,
-            plan.scenarios(),
-            scenario -> scenarios.run(runId.value(), scenario, plan.commonVariables(), events),
-            new SchedulingOptions(plan.settings().parallelism(), plan.settings().failFast()));
-    result.setScenarios(completed);
-    result.setStatus(
-        completed.stream().anyMatch(scenario -> scenario.getStatus().isFailure())
-            ? ResultStatus.FAIL
-            : ResultStatus.PASS);
+    events.publish(new RunStarted(runId, plan.projectName(), plan.environment().id()));
+    try {
+      List<ScenarioResult> completed =
+          scheduler.execute(
+              runId,
+              plan.scenarios(),
+              scenario -> scenarios.run(runId.value(), scenario, plan.commonVariables(), events),
+              new SchedulingOptions(plan.settings().parallelism(), plan.settings().failFast()));
+      result.setScenarios(completed);
+      result.setStatus(
+          completed.stream().anyMatch(scenario -> scenario.getStatus().isFailure())
+              ? ResultStatus.FAIL
+              : ResultStatus.PASS);
+      finish(result, started);
+      events.publish(
+          new RunFinished(
+              runId,
+              result.getStatus(),
+              Duration.ofMillis(result.getDurationMs()),
+              completed.size(),
+              null));
+      return result;
+    } catch (RuntimeException | Error failure) {
+      result.setStatus(ResultStatus.ERROR);
+      finish(result, started);
+      events.publish(
+          new RunFinished(
+              runId,
+              ResultStatus.ERROR,
+              Duration.ofMillis(result.getDurationMs()),
+              result.getScenarios().size(),
+              failureMessage(failure)));
+      throw failure;
+    }
+  }
+
+  private void finish(RunResult result, Instant started) {
     Instant ended = clock.instant();
     result.setEndedAt(ended);
     result.setDurationMs(Duration.between(started, ended).toMillis());
-    result.setMetadata(summary(completed));
-    events.publish(
-        new RunFinished(
-            runId,
-            result.getStatus(),
-            Duration.ofMillis(result.getDurationMs()),
-            completed.size(),
-            null));
-    return result;
+    result.setMetadata(summary(result.getScenarios()));
+  }
+
+  private static String failureMessage(Throwable failure) {
+    String message = failure.getMessage();
+    return message == null || message.isBlank()
+        ? failure.getClass().getSimpleName()
+        : failure.getClass().getSimpleName() + ": " + message;
   }
 
   private static Map<String, Object> summary(List<ScenarioResult> results) {
